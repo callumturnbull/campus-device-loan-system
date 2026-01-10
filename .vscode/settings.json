@@ -1,0 +1,10 @@
+{
+    "azureFunctions.projectSubpath": "code\\catalogue-service",
+    "azureFunctions.deploySubpath": "code\\catalogue-service",
+    "azureFunctions.postDeployTask": "npm install (functions)",
+    "azureFunctions.projectLanguage": "JavaScript",
+    "azureFunctions.projectRuntime": "~4",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureFunctions.projectLanguageModel": 4,
+    "azureFunctions.preDeployTask": "npm prune (functions)"
+}

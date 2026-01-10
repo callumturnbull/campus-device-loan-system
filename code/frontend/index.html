@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Campus Device Loan System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <h1>Campus Device Loan System</h1>
+  <p class="muted">Frontend demo page (calls Catalogue + Loans services)</p>
+
+  <div class="toolbar">
+    <button id="refreshBtn">Refresh</button>
+    <span id="status" class="status">Loading…</span>
+  </div>
+
+  <section class="config">
+    <h2>Configuration</h2>
+    <label>
+      Catalogue:
+      <input id="catalogueUrl" />
+    </label>
+    <label>
+      Loans:
+      <input id="loansUrl" />
+    </label>
+  </section>
+
+  <!-- ================= Devices ================= -->
+  <section>
+    <h2>Devices (Catalogue Service)</h2>
+    <p class="muted">GET /api/devices</p>
+    <div id="devicesError" class="error hidden"></div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Category</th>
+          <th>Total</th>
+          <th>Available</th>
+        </tr>
+      </thead>
+      <tbody id="devicesTbody"></tbody>
+    </table>
+  </section>
+
+  <!-- ================= Loans ================= -->
+  <section>
+    <h2>Loans (Loans Service)</h2>
+    <p class="muted">GET /api/loans</p>
+    <div id="loansError" class="error hidden"></div>
+
+    <!-- Reserve -->
+    <h3>Reserve a Device</h3>
+    <form id="reserveForm" class="reserve">
+      <label>
+        Device ID:
+        <input id="reserveDeviceId" placeholder="e.g. tab-001" />
+      </label>
+      <label>
+        Student ID:
+        <input id="reserveStudentId" placeholder="e.g. S7654321" />
+      </label>
+      <button type="submit">Reserve</button>
+      <span id="reserveMsg" class="muted"></span>
+    </form>
+
+    <!-- Loans table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Loan ID</th>
+          <th>Device ID</th>
+          <th>Student</th>
+          <th>Start</th>
+          <th>Due</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="loansTbody"></tbody>
+    </table>
+
+    <p class="muted">
+      Actions demonstrate staff-style operations (collect / return).  
+      Conflicts (409) and timestamps are intentional evidence.
+    </p>
+  </section>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
