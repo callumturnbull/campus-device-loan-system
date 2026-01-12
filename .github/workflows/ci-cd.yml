@@ -3,17 +3,14 @@ name: CI/CD (Catalogue + Loans)
 on:
   push:
     branches: ["main"]
-    paths:
-      - "code/catalogue-service/**"
-      - "code/loans-service/**"
-      - ".github/workflows/ci-cd.yml"
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -36,50 +33,26 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - name: Deploy Catalogue Service
+        uses: Azure/functions-action@v1
         with:
-          node-version: "22"
-
-      - name: Install Azure Functions Core Tools v4
-        run: npm i -g azure-functions-core-tools@4 --unsafe-perm true
-
-      - name: Install deps (catalogue-service)
-        working-directory: code/catalogue-service
-        run: npm ci
-
-      - name: Publish Catalogue to Azure Functions
-        working-directory: code/catalogue-service
-        env:
-          PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_CATALOGUE }}
-        run: |
-          echo "$PUBLISH_PROFILE" > publishProfile.xml
-          func azure functionapp publish cnd-catalogue-test-ct1 --publish-settings-only publishProfile.xml
+          app-name: cnd-catalogue-test-ct1
+          package: code/catalogue-service
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_CATALOGUE }}
 
   deploy_loans:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - name: Deploy Loans Service
+        uses: Azure/functions-action@v1
         with:
-          node-version: "22"
-
-      - name: Install Azure Functions Core Tools v4
-        run: npm i -g azure-functions-core-tools@4 --unsafe-perm true
-
-      - name: Install deps (loans-service)
-        working-directory: code/loans-service
-        run: npm ci
-
-      - name: Publish Loans to Azure Functions
-        working-directory: code/loans-service
-        env:
-          PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_LOANS }}
-        run: |
-          echo "$PUBLISH_PROFILE" > publishProfile.xml
-          func azure functionapp publish cnd-loans-test-ct1 --publish-settings-only publishProfile.xml
+          app-name: cnd-loans-test-ct1
+          package: code/loans-service
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_LOANS }}
